@@ -1,0 +1,4 @@
+// очистить pip от пакетов
+pip freeze > req.txt
+pip uninstall -y -r req.txt
+
