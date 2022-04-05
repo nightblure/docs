@@ -1,10 +1,12 @@
 # https://habr.com/ru/post/578744/
+
 version: "3.8"
 services:
 
   postgres:
     container_name: pg_container
     image: postgres:13.3
+    # задаем значения необходимых переменных окружения
     environment:
       #POSTGRES_DB: "testdb"
       POSTGRES_USER: "postgres"
@@ -14,20 +16,20 @@ services:
       - "5432:5432"
     volumes:
       #- ../2. Init Database:/docker-entrypoint-initdb.d
-      - .:/var/lib/postgresql/dat
+      # маппинг монтируемой директории на компе
+      # и директории с данными приложения (смотреть на странице образа докера)
+      - ./dev/docker data/postgres:/var/lib/postgresql/dat
 
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4:5.7
+    # задаем значения необходимых переменных окружения
     environment:
       PGADMIN_DEFAULT_EMAIL: "adm@in.com"
       PGADMIN_DEFAULT_PASSWORD: "pass"
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
-      - ./pgadmin:/var/lib/pgadmin
+      - ./dev/docker data/pgadmin:/var/lib/pgadmin
     ports:
+      # пробрасываем порты (соответствие портов докера и на машине)
       - "5050:80"
-
-#networks:
-  #postgres:
-    #driver: bridge
