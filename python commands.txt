@@ -2,3 +2,6 @@
 pip freeze > req.txt
 pip uninstall -y -r req.txt
 
+// если переместил проект и venv поломался (как это бывает в джанго-проекте)
+// можно переустановить pip (перед этим надо активировать вирт. окружение)
+python -m pip install --upgrade --force-reinstall pip
