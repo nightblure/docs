@@ -1,0 +1,48 @@
+﻿pg_ctl.exe status -D "C:/Program Files/PostgreSQL/10/data"
+-----------------------------------------------------
+
+// Создание БД
+psql -U postgres -c "CREATE DATABASE ""dbtest"""
+
+// Удаление БД
+psql -U postgres -c "DROP DATABASE IF EXISTS ""dbtest"""
+
+// Восстановить БД из дампа (работает только если дамп был создан также командой)
+psql -f "C:\DB backups\ACRF dump with data (8 dec)" "dbtest" postgres
+
+// Создание дампа
+pg_dump -U postgres [--encoding=utf-8] [-F c] "ACRF" > "C:\DB backups\ACRF dump (8 dec)"
+
+// Подключение к БД
+psql -U postgres -d "dbtest"
+
+// *если не работает, то указывать путь до psql
+"C:\Program Files\PostgreSQL\10\bin\psql.exe" -U postgres -d postgres -c "CREATE DATABASE ""dbtest"""
+
+// Удаление всех таблиц
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public AUTHORIZATION postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+
+// Отключить все соединения с БД
+SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE datname = current_database()
+AND pid <> pg_backend_pid();
+
+
+// Вернет формальный номер недели (для 01.01.2021 вернет 1)
+SELECT to_char('2021-01-01' ::date, 'ww') ::int
+	
+
+// Вернет номер недели по стандарту ISO 8601 (для 01.01.2021 вернет 53)
+SELECT EXTRACT(WEEK FROM ('2021-01-01' ::date))
+
+
+// Получает из даты date дату дня с номером TARGET_DAY_NUMBER
+date - ((SELECT EXTRACT(DOW FROM date) :: INTEGER - <TARGET_DAY_NUMBER>) * interval '1 day'))
+
+
+
+
