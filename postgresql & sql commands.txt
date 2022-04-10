@@ -44,5 +44,36 @@ SELECT EXTRACT(WEEK FROM ('2021-01-01' ::date))
 date - ((SELECT EXTRACT(DOW FROM date) :: INTEGER - <TARGET_DAY_NUMBER>) * interval '1 day'))
 
 
+// Применить изменения конфига без перезапуска инстанса
+SELECT pg_reload_conf();
 
 
+// Пронумеровать записи таблицы в новом столбце
+ALTER TABLE table ADD field SERIAL
+
+
+// Добавить столбец с нумерацией записей в запрос
+SELECT *, row_number() OVER () as rnum
+FROM test
+
+
+// Сгенерировать записи
+INSERT INTO table(field)
+SELECT generate_series(1, 10, 2)
+
+
+// Изменить существующее ключевое поле на автогенерируемое при вставке, 
+// чтобы его можно было не указывать в INSERT
+CREATE SEQUENCE test_id_seq
+OWNED BY test.id;
+
+ALTER TABLE test
+ALTER id SET DEFAULT nextval('test_id_seq');
+
+
+// Добавить поле в ключ
+ALTER TABLE test ADD PRIMARY KEY (id)
+
+
+// Копирование данных между таблицами
+INSERT INTO table1 (f1, f2, ...) SELECT f1, f2, ... FROM table2

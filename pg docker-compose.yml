@@ -18,7 +18,7 @@ services:
       #- ../2. Init Database:/docker-entrypoint-initdb.d
       # маппинг монтируемой директории на компе
       # и директории с данными приложения (смотреть на странице образа докера)
-      - ./dev/docker data/postgres:/var/lib/postgresql/dat
+      - ./postgres:/var/lib/postgresql/dat
 
   pgadmin:
     container_name: pgadmin_container
@@ -29,7 +29,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "pass"
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
-      - ./dev/docker data/pgadmin:/var/lib/pgadmin
+      - ./pgadmin:/var/lib/pgadmin
     ports:
       # пробрасываем порты (соответствие портов докера и на машине)
       - "5050:80"
