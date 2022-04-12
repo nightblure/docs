@@ -54,6 +54,9 @@ git add .
 // коммит
 git commit -m "message"
 
+// КОММИТ ОДНОЙ КОМАНДОЙ
+git commit -am "message"
+
 // удаление файла локально (если нужно и удаленно, то необходимо сделать commit и push)
 git rm file.txt
 
