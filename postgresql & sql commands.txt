@@ -32,6 +32,14 @@ WHERE datname = current_database()
 AND pid <> pg_backend_pid();
 
 
+// Узнать примерное кол-во строк в таблице (берется из статистики)
+* если требуется узнать примерное кол-во строк у запроса, 
+то это можно сделать с помощью EXPLAIN 
+SELECT reltuples::bigint AS count
+FROM pg_class
+WHERE oid = 'table'::regclass
+
+
 // Вернет формальный номер недели (для 01.01.2021 вернет 1)
 SELECT to_char('2021-01-01' ::date, 'ww') ::int
 	
