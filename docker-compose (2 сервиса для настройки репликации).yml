@@ -1,0 +1,44 @@
+# https://habr.com/ru/post/578744/
+
+version: "3.8"
+services:
+
+  postgres_master:
+    container_name: postgres_master
+    image: postgres:13.3
+    # задаем значения необходимых переменных окружения
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5431:5432"
+    volumes:
+      - ./postgres_master:/var/lib/postgresql/dat
+
+  postgres_replica:
+    container_name: postgres_replica
+    image: postgres:13.3
+    # задаем значения необходимых переменных окружения
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_replica:/var/lib/postgresql/dat
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:5.7
+    # задаем значения необходимых переменных окружения
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "adm@in.com"
+      PGADMIN_DEFAULT_PASSWORD: "pass"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    ports:
+      # пробрасываем порты (порт хоста:порт докер-контейнера)
+      - "5050:80"
