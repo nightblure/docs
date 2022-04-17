@@ -10,8 +10,8 @@ docker images
 // --rm - автоудаление контейнера после его остановки
 docker run -itd --rm <имя образа>
 
-// остановить контейнер
-docker stop <имя контейнера>
+// действия с контейнером
+docker start/restart/stop <имя контейнера>
 
 // удаление контейнера
 docker rm <имя контейнера>
@@ -25,4 +25,7 @@ docker image prune -a
 // поднять контейнер в фоновом режиме из файла docker-compose
 1. перейти в директорию к файлу, названному docker-compose.yml/yaml
 2. docker-compose up -d
+
+// войти в терминал контейнера
+docker exec -it <имя контейнера> bash
 

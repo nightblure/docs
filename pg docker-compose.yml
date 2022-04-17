@@ -4,7 +4,7 @@ version: "3.8"
 services:
 
   postgres:
-    container_name: pg_container
+    container_name: postgres
     image: postgres:13.3
     # задаем значения необходимых переменных окружения
     environment:
@@ -21,7 +21,7 @@ services:
       - ./postgres:/var/lib/postgresql/dat
 
   pgadmin:
-    container_name: pgadmin_container
+    container_name: pgadmin
     image: dpage/pgadmin4:5.7
     # задаем значения необходимых переменных окружения
     environment:
@@ -31,5 +31,5 @@ services:
     volumes:
       - ./pgadmin:/var/lib/pgadmin
     ports:
-      # пробрасываем порты (соответствие портов докера и на машине)
+      # пробрасываем порты (порт хоста:порт докер-контейнера)
       - "5050:80"
