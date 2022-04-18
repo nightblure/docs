@@ -10,7 +10,8 @@ docker network inspect <папка с данными докера>_default
 
 	также папку можно найти в общем списке:
 	docker network ls
-
+* УЗНАВАТЬ IP МАСТЕРА НЕОБЯЗАТЕЛЬНО, ЕСЛИ В DOCKER-COMPOSE БЫЛ ЗАДАН HOSTNAME
+* В ШАГЕ 8 ВМЕСТО ID МОЖНО УКАЗЫВАТЬ HOSTNAME
 
 2. на мастере настроиить postgresql.conf: wal_level = logical и раскомментировать listen_addresses = '*'
 ИЛИ ВМЕСТО РУЧНОЙ ПРАВКИ КОНФИГА вызвать 
