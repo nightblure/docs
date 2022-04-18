@@ -1,6 +1,6 @@
 // для запоминания адресов
 subnet: 172.26.0.0/16
-master: 172.26.0.4/16
+master: 172.19.0.4
 
 1. узнать адрес подсети (Subnet) и адрес мастер-контейнера:
 docker network inspect <папка с данными докера>_default
@@ -12,15 +12,15 @@ docker network inspect <папка с данными докера>_default
 	docker network ls
 
 
-2. в postgresql.conf на мастере задать значение параметра wal_level = logical
-и раскомментировать listen_addresses = '*':
+2. на мастере настроиить postgresql.conf: wal_level = logical и раскомментировать listen_addresses = '*'
+ИЛИ ВМЕСТО РУЧНОЙ ПРАВКИ КОНФИГА вызвать 
+ALTER SYSTEM SET wal_level = logical и ALTER SYSTEM SET listen_addresses = '*'
 
 	2.1 войти в терминал контейнера
 	docker exec -it postgres_master bash
 
 	2.2 обновить пакеты и установить nano
-	apt-get update
-	apt-get install nano
+	apt-get update && apt-get install nano
 
 	2.3 редактирование конфига
 	nano var/lib/postgresql/data/pgdata/postgresql.conf
@@ -69,12 +69,12 @@ PUBLICATION my_publication;
 9. тестирование. на мастере и реплике создать БД и тестовую таблицу:
 
 INSERT INTO test_table(name)
-SELECT generate_series(1, 10000)::text
+SELECT generate_series(1, 10000)::text;
 
 select *
-from test_table
+from test_table;
 
-delete from test_table
+delete from test_table;
 
 
 ИСТОЧНИКИ ИНФОРМАЦИИ:

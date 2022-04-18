@@ -1,6 +1,23 @@
 ﻿pg_ctl.exe status -D "C:/Program Files/PostgreSQL/10/data"
 -----------------------------------------------------
 
+// Применить изменения конфигурации
+SELECT pg_reload_conf();
+
+// Показать путь к конфигам
+SHOW config_file;
+
+// Таблица значений параметров конфигурации
+SELECT *
+FROM pg_settings
+
+// Изменение значения параметра конфигурации в запросе (пример)
+ALTER SYSTEM SET wal_level = replica
+
+// Проверка состояния репликаций
+SELECT *
+FROM pg_stat_replication;
+
 // Создание БД
 psql -U postgres -c "CREATE DATABASE ""dbtest"""
 
@@ -12,6 +29,9 @@ psql -f "C:\DB backups\ACRF dump with data (8 dec)" "dbtest" postgres
 
 // Создание дампа
 pg_dump -U postgres [--encoding=utf-8] [-F c] "ACRF" > "C:\DB backups\ACRF dump (8 dec)"
+
+// Создать дамп схемы без данных
+pg_dump -s db_name > dump_path/name
 
 // Подключение к БД
 psql -U postgres -d "dbtest"
