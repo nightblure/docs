@@ -18,6 +18,9 @@ ALTER SYSTEM SET wal_level = replica
 SELECT *
 FROM pg_stat_replication;
 
+// Выполнение запросов под линуксовым пользователем
+psql -U postgres -c "query"
+
 // Создание БД
 psql -U postgres -c "CREATE DATABASE ""dbtest"""
 
