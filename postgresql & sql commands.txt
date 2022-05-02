@@ -18,6 +18,12 @@ ALTER SYSTEM SET wal_level = replica
 SELECT *
 FROM pg_stat_replication;
 
+// Сбросить значение сиквенса
+SELECT pg_catalog.setval('"T120501$SEQ"'::regclass, 1, false);
+
+// Получить следующее значение сиквенса
+nextval('"T120501A8$SEQ"')
+
 // Выполнение запросов под линуксовым пользователем
 psql -U postgres -c "query"
 
