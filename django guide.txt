@@ -10,6 +10,9 @@ File->Settings-> найти текущий проект и добавить дл
 .\venv\Scripts\activate (активация окружения)
 pip install Django, python-dotenv, psycopg2
 
+Если не активируется виртуальное окружение:
+в cmd/powershell запущенном от админа вводим Set-ExecutionPolicy RemoteSigned и отвечаем A
+
 5. запустить старт проекта. должна появиться соотв. директория: 
 django-admin startproject <имя>
 
