@@ -24,6 +24,9 @@ SELECT pg_catalog.setval('"T120501$SEQ"'::regclass, 1, false);
 // Получить следующее значение сиквенса
 nextval('"T120501A8$SEQ"')
 
+// Подключение к БД
+psql -U postgres -d "dbtest"
+
 // Выполнение запросов под линуксовым пользователем
 psql -U postgres -c "query"
 
@@ -41,9 +44,6 @@ pg_dump -U postgres [--encoding=utf-8] [-F c] "ACRF" > "C:\DB backups\ACRF dump 
 
 // Создать дамп схемы без данных
 pg_dump -s db_name > dump_path/name
-
-// Подключение к БД
-psql -U postgres -d "dbtest"
 
 // *если не работает, то указывать путь до psql
 "C:\Program Files\PostgreSQL\10\bin\psql.exe" -U postgres -d postgres -c "CREATE DATABASE ""dbtest"""
