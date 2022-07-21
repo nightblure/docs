@@ -6,16 +6,18 @@ services:
     container_name: redis
     image: "redis"
     ports:
-     - "6379:6379"
+     - 6379:6379
     volumes:
      - ./redis/data:/var/lib/redis
-      - ./redis/conf:/usr/local/etc/redis/redis.conf
+     - ./redis/conf:/usr/local/etc/redis/redis.conf
 
- celery_worker:
+ celery:
     container_name: celery
     image: "celery"
     volumes:
       - ./celery:/app
+    ports:
+     - 5675:5675
 
  flower:
     container_name: flower
@@ -24,3 +26,17 @@ services:
       - ./flower:/app
     ports:
       - 5557:5555
+
+ rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: 'rabbitmq'
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./rabbitmq/data/:/var/lib/rabbitmq
+        - ./rabbitmq/log/:/var/log/rabbitmq

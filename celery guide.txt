@@ -1,0 +1,70 @@
+1. установить в venv проекта celery и брокер сообщений:
+	- redis (обязателен к установке, т.к. только он используется в качесте бэкенда для celery): 
+	pip install django-redis
+
+	- rabbitmq (опционально, т.к. в качестве брокера можно заюзать redis):
+	pip install rabbitmq (django-rabbitmq)
+
+в папке ПРОЕКТА завести файл celery.py с содержимым:
+
+import os
+from celery import Celery
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+celery_app = Celery('project')
+celery_app.config_from_object('django.conf:settings', namespace='CELERY')
+celery_app.autodiscover_tasks()
+
+
+1.1. развернуть redis, [rabbitmq] и celery из docker-compose (есть в docs)
+
+2. в settings проекта определить константы:
+
+# порты смотреть в докере!
+REDIS_PORT = 6379
+RABBITMQ_PORT = 5672
+
+# broker url for REDIS
+CELERY_BROKER_URL = f'redis://localhost:{REDIS_PORT}'
+
+# broker url for RABBITMQ
+#CELERY_BROKER_URL = f'amqp://guest:guest@localhost:{RABBITMQ_PORT}'
+
+# в качестве бэкенда используем redis
+CELERY_RESULT_BACKEND = 'redis://'
+
+# настройка redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://localhost:{REDIS_PORT}',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        }
+    }
+}
+
+
+3. в файле __init__.py в папке ПРОЕКТА прописать код для автозапуска celery:
+
+from .celery import celery_app
+__all__ = ('celery_app',)
+
+
+4. в папке ПРИЛОЖЕНИЯ заводим файл tasks.py и в нем прописываем таски (пример):
+from celery import shared_task
+@shared_task
+def debug_task():
+    print('test task')
+
+
+5. в терминале из директории (папки) ПРОЕКТА (там где лежит settings, wsgi и т.д.) запустить команду: 
+celery -A <имя проекта> worker -l DEBUG
+все должно отрабатывать корректно с выводом отладочной информации
+
+
+6. далее можно проверить выполнение тасков. например в папке ПРОЕКТА выполнить следующие команды:
+python manage.py shell
+
+from <app_name>.tasks import debug_task
+debug_task.delay()

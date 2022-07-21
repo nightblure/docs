@@ -30,5 +30,11 @@ docker image prune -a
 docker exec -it <имя контейнера> bash
 
 // просмотр IP-адресов контейнеров, информации о подсети и т.д.
-docker network inspect <папка с данными докера>
+docker network inspect <папка с данными докера>_default
+
+	пример:
+	docker network inspect dockerdata_default
+
+	также папку можно найти в списке:
+	docker network ls
 
