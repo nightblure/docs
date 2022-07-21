@@ -1,9 +1,9 @@
-1. установить в venv проекта celery и брокер сообщений:
-	- redis (обязателен к установке, т.к. только он используется в качесте бэкенда для celery): 
-	pip install django-redis
+1. в локальный venv поставить зависимости: pip install celery, django-redis, amqp, flower
+amqp - брокер сообщений rabbitmq, ставить необязательно, 
+т.к. redis может работать как брокер и бэкенд одновременно
 
-	- rabbitmq (опционально, т.к. в качестве брокера можно заюзать redis):
-	pip install rabbitmq (django-rabbitmq)
+в п. 2 приведены настройки для билда: брокер - rabbitmq, бэкенд - redis
+брокера можно менять, всего лишь подменив урл брокера и перезапустив celery (см. урлы в настройках)
 
 в папке ПРОЕКТА завести файл celery.py с содержимым:
 
@@ -16,22 +16,21 @@ celery_app.config_from_object('django.conf:settings', namespace='CELERY')
 celery_app.autodiscover_tasks()
 
 
-1.1. развернуть redis, [rabbitmq] и celery из docker-compose (есть в docs)
+1.1. развернуть redis, rabbitmq и celery из docker-compose (есть в docs)
 
-2. в settings проекта определить константы:
+2. настройки файла settings проекта:
 
 # порты смотреть в докере!
 REDIS_PORT = 6379
 RABBITMQ_PORT = 5672
 
-# broker url for REDIS
-CELERY_BROKER_URL = f'redis://localhost:{REDIS_PORT}'
+REDIS_BROKER_URL = f'redis://localhost:{REDIS_PORT}'
+RABBITMQ_BROKER_URL = f'amqp://guest:guest@localhost:{RABBITMQ_PORT}' # 'amqp://localhost'
 
-# broker url for RABBITMQ
-#CELERY_BROKER_URL = f'amqp://guest:guest@localhost:{RABBITMQ_PORT}'
+CELERY_BROKER_URL = RABBITMQ_BROKER_URL
 
 # в качестве бэкенда используем redis
-CELERY_RESULT_BACKEND = 'redis://'
+CELERY_RESULT_BACKEND = 'redis://' # f'redis://localhost:{REDIS_PORT}'
 
 # настройка redis
 CACHES = {
@@ -68,3 +67,15 @@ python manage.py shell
 
 from <app_name>.tasks import debug_task
 debug_task.delay()
+
+в redis-commander можно увидеть, что таски выполняются
+
+также можно заюзать сервис мониторинга flower. его нужно запустить 
+ПОСЛЕ запуска celery в отдельном терминале командой:
+celery -A <project_name> flower
+
+после этого по адресу http://localhost:5555 должна отобразиться информация о воркерах и тасках
+flower показывает во вкладке брокера урл брокера, так можно определить активного брокера
+
+http://localhost:8081 - redis-commander, там также можно чекать таски
+
