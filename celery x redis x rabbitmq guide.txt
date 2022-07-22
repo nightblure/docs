@@ -15,6 +15,9 @@ p.s. flower и celery хз как запустить из докера. но в�
 import os
 from celery import Celery
 
+# в обычном проекте нужно также импортировать таски!
+# from tasks import test_task
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 celery_app = Celery('project')
 celery_app.config_from_object('django.conf:settings', namespace='CELERY')
@@ -64,7 +67,7 @@ import datetime
 def test_task():
 
     with open('tasks_log.txt', 'a') as file:
-        file_object.write(f"task info.. | {datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n")
+        file.write(f"task info.. | {datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n")
 
 
 5. в терминале из директории (папки) ПРОЕКТА (там где лежит settings, wsgi и т.д.) запустить команду: 
@@ -116,10 +119,10 @@ CELERY_BEAT_SCHEDULE = {
 при смене schedule можно перезапускать только планировщик
 
 ---------------------------------
-* КОМАНДЫ
+* КОМАНДЫ для django
 (параметр debug можно заменить на info и наоборот)
 
-// запуск celery
+// запуск celery из django приложения
 celery -A project worker -l info -P solo
 
 // запуск flower
@@ -127,6 +130,16 @@ celery -A project flower
 
 // запуск планировщика выполнения задач
 celery -A project beat -l info
+
+
+* КОМАНДЫ для обычного проекта
+
+// запуск celery из обычного проекта (<путь до объекта celery>.celery_app)
+celery -A project.celery_.celery_app worker -l info -P solo
+
+celery -A project.celery_.celery_app project flower
+
+celery -A project.celery_.celery_app beat -l info
 
 
 
