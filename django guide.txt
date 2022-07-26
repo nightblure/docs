@@ -19,6 +19,9 @@ django-admin startproject <имя>
 6. перейти в директорию проекта создать приложение:
 python manage.py startapp <имя>
 
+	* еще можно создать суперюзера: python manage.py createsuperuser
+	и зайти под ним в админку: http://127.0.0.1:8000/admin/
+
 7. в директории проекта теперь можно запускать приложение:
 python manage.py runserver
 
