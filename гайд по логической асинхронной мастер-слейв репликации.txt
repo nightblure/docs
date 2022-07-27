@@ -1,7 +1,3 @@
-// для запоминания адресов
-subnet: 172.26.0.0/16
-master: 172.19.0.4
-
 1. узнать адрес подсети (Subnet) и адрес мастер-контейнера:
 docker network inspect <папка с данными докера>_default
 
@@ -13,9 +9,10 @@ docker network inspect <папка с данными докера>_default
 * УЗНАВАТЬ IP МАСТЕРА НЕОБЯЗАТЕЛЬНО, ЕСЛИ В DOCKER-COMPOSE БЫЛ ЗАДАН HOSTNAME
 * В ШАГЕ 8 ВМЕСТО ID МОЖНО УКАЗЫВАТЬ HOSTNAME
 
-2. на мастере настроиить postgresql.conf: wal_level = logical и раскомментировать listen_addresses = '*'
+2. на мастере настроить postgresql.conf: wal_level = logical и раскомментировать listen_addresses = '*'
 ИЛИ ВМЕСТО РУЧНОЙ ПРАВКИ КОНФИГА вызвать 
 ALTER SYSTEM SET wal_level = logical и ALTER SYSTEM SET listen_addresses = '*'
+(работает только через правку конфига)
 
 	2.1 войти в терминал контейнера
 	docker exec -it postgres_master bash

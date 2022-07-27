@@ -5,7 +5,7 @@ services:
 
   postgres_master:
     container_name: postgres_master
-    hostname: postgres-master.com
+    hostname: postgres-master
     image: postgres:13.3
     # задаем значения необходимых переменных окружения
     environment:
@@ -19,7 +19,7 @@ services:
 
   postgres_replica:
     container_name: postgres_replica
-    hostname: postgres-replica.com
+    hostname: postgres-replica
     image: postgres:13.3
     # задаем значения необходимых переменных окружения
     environment:
