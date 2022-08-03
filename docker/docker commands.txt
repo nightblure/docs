@@ -38,3 +38,32 @@ docker network inspect <папка с данными докера>_default
 	также папку можно найти в списке:
 	docker network ls
 
+
+// собрать образ из Dockerfile
+! докер-файл должен быть назван Dockerfile (без расширения)
+docker build -t docker-ubuntu .
+
+// скопировать файл из контейнера
+docker cp <id контейнера>:<путь и файл> <имя копии>
+пример: docker cp pgadmin:/tmp/dump dump
+
+// скопировать файл в контейнер
+docker cp <имя файла> container_id:/<путь и имя копии>
+пример: docker cp r.txt pgadmin:/tmp/r.txt
+
+
+// пуш образа в докер-репозиторий
+
+1. посмотреть id нужного образа командой docker images
+id выглядит как 869c87edba75
+
+2. присвоить образу тег:
+docker tag <id образа> nightblure/<имя образа>
+
+3. залогиниться:
+docker login -u nightblure
+130897Binuk (пароль вставить ПКМ)
+
+4. запушить образ
+docker push nightblure/<имя образа>
+
