@@ -51,6 +51,9 @@ docker cp <id контейнера>:<путь и файл> <имя копии>
 docker cp <имя файла> container_id:/<путь и имя копии>
 пример: docker cp r.txt pgadmin:/tmp/r.txt
 
+// скопировать папку с файлами в контейнер
+docker cp pkg/. debian:/tmp/pkg/
+
 
 // пуш образа в докер-репозиторий
 

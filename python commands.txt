@@ -5,3 +5,11 @@ pip uninstall -y -r req.txt
 // если переместил проект и venv поломался (как это бывает в джанго-проекте)
 // можно переустановить pip (перед этим надо активировать вирт. окружение)
 python -m pip install --upgrade --force-reinstall pip
+
+// установить все пакеты без инета
+mkdir pypackages
+pip freeze > ./pypackages/req.txt
+// пакеты загружаются согласно содержимому req.txt
+pip download -d ./pypackages -r ./pypackages/req.txt
+// установка пакетов
+[python3.7 -m] pip install —no-index —find-links ./pypackages -r ./pypackages/req.txt
