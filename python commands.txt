@@ -1,6 +1,16 @@
+// сброс зависимостей в txt
+pip freeze > requirements.txt
+
+// установка зависимостей из txt
+pip install -r requirements.txt
+
 // очистить pip от пакетов
 pip freeze > req.txt
 pip uninstall -y -r req.txt
+
+// создание и активация виртуального окружения
+python -m venv venv
+./venv/Scripts/activate
 
 // если переместил проект и venv поломался (как это бывает в джанго-проекте)
 // можно переустановить pip (перед этим надо активировать вирт. окружение)
@@ -9,7 +19,12 @@ python -m pip install --upgrade --force-reinstall pip
 // установить все пакеты без инета
 mkdir pypackages
 pip freeze > ./pypackages/req.txt
-// пакеты загружаются согласно содержимому req.txt
-pip download -d ./pypackages -r ./pypackages/req.txt
-// установка пакетов
-[python3.7 -m] pip install —no-index —find-links ./pypackages -r ./pypackages/req.txt
+
+	// пакеты загружаются согласно содержимому req.txt
+	pip download -d ./pypackages -r ./pypackages/req.txt
+
+	// установка пакетов
+	[python3.7 -m] pip install --no-index --find-links ./pypackages -r ./pypackages/req.txt
+
+
+
