@@ -4,7 +4,7 @@ services:
 
  redis:
     container_name: redis
-    image: "redis"
+    image: redis
     ports:
      - 6379:6379
     volumes:
@@ -13,7 +13,7 @@ services:
 
  celery:
     container_name: celery
-    image: "celery"
+    image: celery
     volumes:
       - ./celery:/app
     ports:
@@ -29,7 +29,7 @@ services:
 
  rabbitmq:
     image: rabbitmq:management-alpine
-    container_name: 'rabbitmq'
+    container_name: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"

@@ -36,7 +36,7 @@ psql -U postgres -c "CREATE DATABASE ""dbtest"""
 // Удаление БД
 psql -U postgres -c "DROP DATABASE IF EXISTS ""dbtest"""
 
-// Восстановить БД из дампа (работает только если дамп был создан также командой)
+// Восстановить БД из дампа
 psql -f "C:\DB backups\ACRF dump with data (8 dec)" "dbtest" postgres
 
 // Создание дампа

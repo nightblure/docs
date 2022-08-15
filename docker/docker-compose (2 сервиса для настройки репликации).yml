@@ -6,34 +6,34 @@ services:
   postgres_master:
     container_name: postgres_master
     hostname: postgres-master
-    image: postgres:13.3
+    image: postgres
     # задаем значения необходимых переменных окружения
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "pass"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     ports:
-      - "5431:5432"
+      - 5431:5432
     volumes:
       - ./postgres_master:/var/lib/postgresql/dat
 
   postgres_replica:
     container_name: postgres_replica
     hostname: postgres-replica
-    image: postgres:13.3
+    image: postgres
     # задаем значения необходимых переменных окружения
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "pass"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - ./postgres_replica:/var/lib/postgresql/dat
 
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4:5.7
+    image: dpage/pgadmin
     # задаем значения необходимых переменных окружения
     environment:
       PGADMIN_DEFAULT_EMAIL: "adm@in.com"
@@ -43,4 +43,4 @@ services:
       - ./pgadmin:/var/lib/pgadmin
     ports:
       # пробрасываем порты (порт хоста:порт докер-контейнера)
-      - "5050:80"
+      - 5050:80

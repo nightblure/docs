@@ -16,6 +16,9 @@ docker start/restart/stop <имя контейнера>
 // удаление контейнера
 docker rm <имя контейнера>
 
+// удаление образа
+docker rmi <имя образа>
+
 // удаление всех остановленных контейнеров
 docker container prune
 
