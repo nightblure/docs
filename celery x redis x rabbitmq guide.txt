@@ -14,14 +14,13 @@ p.s. flower и celery хз как запустить из докера. но в�
 в папке ПРОЕКТА завести файл celery.py с содержимым:
 
 import os
-from celery import Celery
+from celery
 
-# в обычном проекте нужно также импортировать таски!
-# from tasks import test_task
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
-celery_app = Celery('project')
-celery_app.config_from_object('django.conf:settings', namespace='CELERY')
+# только для джанги
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+# обязательно нужно импортировать файл с тасками в include, либо обычным import
+celery_app = celery.Celery('tasks', include=['project.tasks'])
+celery_app.config_from_object('project.settings', namespace='CELERY')
 celery_app.autodiscover_tasks()
 
 
@@ -98,16 +97,18 @@ debug_task.delay(<аргументы>)
 ------------------------------------ ВЫПОЛНЕНИЕ ОТЛОЖЕННЫХ ЗАДАЧ -----------------------------------
 
 7. выполнение отложенных задач
-ставим библиотеку с планировщиком задач: pip install django_celery_beat
-в settings INSTALLED_APPS добавить 'django_celery_beat' и импорты:
+ставим пакет с планировщиком задач: pip install django_celery_beat
+* (ДЛЯ DJANGO в settings INSTALLED_APPS добавить 'django_celery_beat')
+добавить импорты:
 from celery.schedules import crontab
 from datetime import timedelta
 
 также необходимо добавить расписание запуска:
+# для обычного приложения вместо использовать celery_app.conf.beat_schedule (не забыть импорт инстанса celery_app)
 CELERY_BEAT_SCHEDULE = {
     # имя
     'test_delayed_task_name': {
-        # путь к задаче
+        # путь к задаче. если не работает, нужно оставить только название таска
         'task': 'newsapp.tasks.test_task',
         # кулдаун выполнения (минимальный - 1 минута)
         #'schedule': crontab(minute=1)
@@ -134,13 +135,14 @@ celery -A project flower
 celery -A project beat -l info
 
 
-* КОМАНДЫ для обычного проекта
+* КОМАНДЫ для обычного проекта (сначала запустить celery, потом в соседнем терминале celery_beat)
 
 // запуск celery из обычного проекта (<путь до объекта celery>.celery_app)
 celery -A project.celery_.celery_app worker -l info -P solo
 
 celery -A project.celery_.celery_app project flower
 
+// запуска celery_beat
 celery -A project.celery_.celery_app beat -l info
 
 
