@@ -1,0 +1,52 @@
+def print_object(obj):
+    #print(f'{str(obj)}:', end=' ')
+    if isinstance(obj, dict):
+        print(obj, end=' ')
+    else:
+        [print(x, end=' ') for x in obj]
+    print()
+
+# генераторное выражение
+gen_expr = (x for x in range(1, 6))
+print_object(gen_expr)
+
+# функция-генератор
+def g_func():
+    current = 1
+    while current <= 5:
+        yield current
+        current += 1
+
+# протокол итератора
+class gen_class:
+    def __init__(self):
+        self.l = [x for x in range(1, 6)]
+        self.current_index = -1
+        
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.current_index < len(self.l) - 1:
+            self.current_index += 1
+            return self.l[self.current_index]
+        else:
+            raise StopIteration
+    
+    def __name__():
+        return cls.__name__
+            
+g = g_func()
+print_object(g)
+
+obj = gen_class()
+print_object(obj)
+
+s = {x for x in range(1, 6)}
+d = {x: x for x in range(1, 6)}
+l = [x for x in range(1, 6)]
+print_object(s)
+print_object(d)
+print_object(l)
+    
+    
