@@ -138,12 +138,12 @@ celery -A project beat -l info
 * КОМАНДЫ для обычного проекта (сначала запустить celery, потом в соседнем терминале celery_beat)
 
 // запуск celery из обычного проекта (<путь до объекта celery>.celery_app)
-celery -A project.celery_.celery_app worker -l info -P solo
+celery -A project.tasks.celery_app worker -l info -P solo
 
-celery -A project.celery_.celery_app project flower
+celery -A project.tasks.celery_app project flower
 
 // запуска celery_beat
-celery -A project.celery_.celery_app beat -l info
+celery -A project.tasks.celery_app beat -l info
 
 
 
