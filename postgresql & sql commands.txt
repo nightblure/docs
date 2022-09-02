@@ -48,17 +48,26 @@ pg_dump -s db_name > dump_path/name
 // *если не работает, то указывать путь до psql
 "C:\Program Files\PostgreSQL\10\bin\psql.exe" -U postgres -d postgres -c "CREATE DATABASE ""dbtest"""
 
+
 // Удаление всех таблиц
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public AUTHORIZATION postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO public;
 
+
 // Отключить все соединения с БД
 SELECT pg_terminate_backend(pg_stat_activity.pid)
 FROM pg_stat_activity
 WHERE datname = current_database()
 AND pid <> pg_backend_pid();
+
+
+// Проапдейтить поле от 1 до N
+create sequence seq_x_test;
+update T
+set FIELD = nextval('seq_x_test');
+drop sequence seq_x_test;
 
 
 // Узнать примерное кол-во строк в таблице (берется из статистики)
