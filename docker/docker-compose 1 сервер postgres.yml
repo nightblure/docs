@@ -22,7 +22,7 @@ services:
 
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4:5.7
+    image: dpage/pgadmin
     # задаем значения необходимых переменных окружения
     environment:
       PGADMIN_DEFAULT_EMAIL: "adm@in.com"
