@@ -9,10 +9,13 @@ docker network inspect <папка с данными докера>_default
 * УЗНАВАТЬ IP МАСТЕРА НЕОБЯЗАТЕЛЬНО, ЕСЛИ В DOCKER-COMPOSE БЫЛ ЗАДАН HOSTNAME
 * В ШАГЕ 8 ВМЕСТО ID МОЖНО УКАЗЫВАТЬ HOSTNAME
 
-2. на мастере настроить postgresql.conf: wal_level = logical и раскомментировать listen_addresses = '*'
-ИЛИ ВМЕСТО РУЧНОЙ ПРАВКИ КОНФИГА вызвать 
-ALTER SYSTEM SET wal_level = logical и ALTER SYSTEM SET listen_addresses = '*'
-(работает только через правку конфига)
+2. на мастере поправить конфиг postgresql.conf: 
+	wal_level = logical и раскомментировать listen_addresses = '*'
+ИЛИ вместо ручной правки конфига вызвать:
+	ALTER SYSTEM SET wal_level = logical
+	ALTER SYSTEM SET listen_addresses = '*'
+	SELECT pg_reload_conf();
+
 
 	2.1 войти в терминал контейнера
 	docker exec -it postgres_master bash
@@ -21,20 +24,23 @@ ALTER SYSTEM SET wal_level = logical и ALTER SYSTEM SET listen_addresses = '*'
 	apt-get update && apt-get install nano
 
 	2.3 редактирование конфига
-	nano var/lib/postgresql/data/pgdata/postgresql.conf
+	nano var/lib/postgresql/data/postgresql.conf (если конфига нет, то он лежит просто в другой папке, нужно найти его)
 
+	2.4 ребутнуть контейнер мастера
+	подключиться к нему в pgAdmin. если имя контейнера не резолвится, то в hostname указать host.docker.internal
+
+	2.5 перезапустить контейнер и убедиться, что параметр wal_level поменял свое значение:
+	select * 
+	from pg_settings
+	where name = 'wal_level'
 
 3*. (необязательно) в pg_hba.conf разрешить всем хостам подсети коннектиться по адресу подсети (subnet):
 host replication all <адрес подсети с маской> md5
 
 	3.1 редактирование конфига
-	nano var/lib/postgresql/data/pgdata/pg_hba.conf
+	nano var/lib/postgresql/data/pg_hba.conf
 
-
-4. применить изменения конфигурации мастера ребутом контейнера/сервиса postgresql
-
-
-5. создаем БД testdb и таблицу на мастере и реплике
+4. создаем БД testdb и таблицу на мастере и реплике
 
 у таблицы обязательно должен быть первичный ключ, без этого логическая репликация не заработает!
 
@@ -45,7 +51,7 @@ name TEXT);
 ALTER TABLE test_table REPLICA IDENTITY FULL;
 
 
-6*. (необязательно) на мастере создать пользователя с ролью replication
+5*. (необязательно) на мастере создать пользователя с ролью replication
 если шаг пропущен, можно юзать пользователя postgres
 
 CREATE ROLE replication_user WITH REPLICATION LOGIN PASSWORD 'pass';
@@ -53,18 +59,18 @@ GRANT ALL PRIVILEGES ON DATABASE testdb TO replication_user;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO replication_user;
 
 
-7. создать публикацию на мастере
+6. создать публикацию на мастере
 CREATE PUBLICATION my_publication 
 FOR TABLE test_table;
 
 
-8. подписаться на публикацию из реплики
+7. подписаться на публикацию из реплики
 CREATE SUBSCRIPTION my_subscription 
 CONNECTION 'host=<IP мастера без маски подсети> port=5432 password=pass user=<пользователь с ролью replication или postgres> dbname=testdb' 
 PUBLICATION my_publication;
 
 
-9. тестирование. на мастере и реплике создать БД и тестовую таблицу:
+8. тестирование. на мастере и реплике создать БД и тестовую таблицу:
 
 INSERT INTO test_table(name)
 SELECT generate_series(1, 10000)::text;
