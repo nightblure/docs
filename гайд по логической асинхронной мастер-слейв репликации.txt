@@ -6,28 +6,30 @@ docker network inspect <папка с данными докера>_default
 
 	также папку можно найти в общем списке:
 	docker network ls
+
 * УЗНАВАТЬ IP МАСТЕРА НЕОБЯЗАТЕЛЬНО, ЕСЛИ В DOCKER-COMPOSE БЫЛ ЗАДАН HOSTNAME
 * В ШАГЕ 8 ВМЕСТО ID МОЖНО УКАЗЫВАТЬ HOSTNAME
 
+
 2. на мастере поправить конфиг postgresql.conf: 
-	wal_level = logical и раскомментировать listen_addresses = '*'
-ИЛИ вместо ручной правки конфига вызвать:
-	ALTER SYSTEM SET wal_level = logical
-	ALTER SYSTEM SET listen_addresses = '*'
+
+	ALTER SYSTEM SET wal_level = logical;
+	ALTER SYSTEM SET listen_addresses = '*';
 	SELECT pg_reload_conf();
 
+ИЛИ РАСКОММЕНТИРОВАТЬ wal_level = logical и listen_addresses = '*':
 
-	2.1 войти в терминал контейнера
-	docker exec -it postgres_master bash
+	2.1 войти в терминал контейнера: docker exec -it pg_master bash
 
-	2.2 обновить пакеты и установить nano
-	apt-get update && apt-get install nano
+	2.2 обновить пакеты и установить nano: apt-get update && apt-get install nano
 
 	2.3 редактирование конфига
-	nano var/lib/postgresql/data/postgresql.conf (если конфига нет, то он лежит просто в другой папке, нужно найти его)
+	nano var/lib/postgresql/data/postgresql.conf 
+	* если конфига нет, то он лежит просто в другой папке, нужно найти его
 
 	2.4 ребутнуть контейнер мастера
 	подключиться к нему в pgAdmin. если имя контейнера не резолвится, то в hostname указать host.docker.internal
+        !! ПРИ НАСТРОЙКЕ КОННЕКТА НЕ ЗАБЫТЬ УКАЗАТЬ РАЗНЫЕ ПОРТЫ! У МАСТЕРА 5431, У РЕПЛИКИ 5432
 
 	2.5 перезапустить контейнер и убедиться, что параметр wal_level поменял свое значение:
 	select * 
@@ -60,14 +62,14 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO replication_user;
 
 
 6. создать публикацию на мастере
-CREATE PUBLICATION my_publication 
-FOR TABLE test_table;
+CREATE PUBLICATION publication 
+FOR TABLE <table>;
 
 
 7. подписаться на публикацию из реплики
-CREATE SUBSCRIPTION my_subscription 
-CONNECTION 'host=<IP мастера без маски подсети> port=5432 password=pass user=<пользователь с ролью replication или postgres> dbname=testdb' 
-PUBLICATION my_publication;
+CREATE SUBSCRIPTION subscription 
+CONNECTION 'host=<IP мастера без маски подсети или hostname> port=<port> password=pass user=<пользователь с ролью replication или postgres> dbname=testdb'
+PUBLICATION publication;
 
 
 8. тестирование. на мастере и реплике создать БД и тестовую таблицу:
