@@ -1,24 +1,55 @@
-// сброс зависимостей в txt
-pip freeze > requirements.txt
+venv:
+	// создание и активация виртуального окружения
+	python -m venv venv
+	./venv/Scripts/activate
 
-// установка зависимостей из txt
-pip install -r requirements.txt
+	// экспорт списка зависимостей
+	pip freeze > requirements.txt
 
-// очистить pip от пакетов
-pip freeze > req.txt
-pip uninstall -y -r req.txt
+	// установка зависимостей из txt
+	pip install -r requirements.txt
 
-// создание и активация виртуального окружения
-python -m venv venv
-./venv/Scripts/activate
+	// очистить pip от пакетов
+	pip freeze > req.txt
+	pip uninstall -y -r req.txt
 
-// если переместил проект и venv поломался (как это бывает в джанго-проекте)
-// можно переустановить pip (перед этим надо активировать вирт. окружение)
-python -m pip install --upgrade --force-reinstall pip
+	// если переместил проект и venv поломался (как это бывает в джанго-проекте)
+	// можно переустановить pip (перед этим надо активировать вирт. окружение)
+	python -m pip install --upgrade --force-reinstall pip
 
-// установить все пакеты без инета
-mkdir pypackages
-pip freeze > ./pypackages/req.txt
+-----------------------------------------------------------------------------
+
+poetry:
+сначала необходимо установить poetry: pip install poetry
+poetry работает с двумя файлами:
+	* pyproject.toml - хранит информацию о проекте и основных зависимостях
+	* poetry.lock - хранит подробную информацию о всех зависимостях
+
+	// инициализация и активация poetry в существующем проекте
+	poetry init
+	poetry shell
+	
+	// добавление зависимости(-ей) в poetry
+	poetry add <dep_1> <dep_2> ... <dep_n>
+
+	// генерация файла poetry.lock (файл хранит точные версии всех зависимостей)
+	poetry lock
+
+	// обновление версий зависимостей в poetry.lock
+	poetry update
+
+	// установка зависимостей из poetry.lock или pyproject.toml 
+	// необходимо наличие pyproject.toml, но желательно иметь оба файла
+	poetry install
+
+	// экспорт зависимостей в txt
+	poetry export -f requirements.txt --output requirements.txt
+
+-----------------------------------------------------------------------------
+
+// установить все пакеты без инета:
+	mkdir pypackages
+	pip freeze > ./pypackages/req.txt
 
 	// пакеты загружаются согласно содержимому req.txt
 	pip download -d ./pypackages -r ./pypackages/req.txt
