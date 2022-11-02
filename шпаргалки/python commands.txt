@@ -58,4 +58,10 @@ poetry работает с двумя файлами:
 	[python3.7 -m] pip install --no-index --find-links ./pypackages -r ./pypackages/req.txt
 
 
+// выбор рандомного элемента коллекции
+import random
+nums = [x for x in range(1, 11)]
+print(random.choice(nums))
+
+
 
