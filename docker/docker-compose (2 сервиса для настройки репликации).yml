@@ -11,8 +11,9 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "pass"
+    # порт ХОСТА:порт КОНТЕЙНЕРА
     ports:
-      - 5431:5432
+      - 5434:5432
     volumes:
       - ./postgres_master:/var/lib/postgresql/dat
 
@@ -24,8 +25,9 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "pass"
+    # порт ХОСТА:порт КОНТЕЙНЕРА
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - ./postgres_replica:/var/lib/postgresql/dat
 
