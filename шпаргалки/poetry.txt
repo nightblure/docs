@@ -1,0 +1,34 @@
+сначала необходимо установить poetry: pip install poetry
+
+poetry работает с двумя файлами:
+	* pyproject.toml - хранит информацию о проекте и основных зависимостях
+	* poetry.lock - хранит подробную информацию о всех зависимостях
+
+	// инициализация и активация poetry в существующем проекте
+	poetry init
+	poetry shell
+	
+	// добавление зависимости(-ей) в poetry
+	poetry add <dep_1> <dep_2> ... <dep_n>
+
+	// генерация файла poetry.lock (файл хранит точные версии всех зависимостей)
+	poetry lock
+
+	// обновление версий зависимостей в poetry.lock
+	poetry update
+
+	// установка зависимостей из poetry.lock или pyproject.toml 
+	// необходимо наличие pyproject.toml, но желательно иметь оба файла
+	poetry install
+
+	// экспорт зависимостей в txt
+	poetry export -f requirements.txt --output requirements.txt
+
+	// !! узнать путь к интерпретатору текущего окружения poetry
+        poetry env info --path
+
+	// !! полезная информация poetry
+        poetry env info
+
+	// удаление и деактивация виртуальных окружений проекта
+	poetry env remove --all
