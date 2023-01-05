@@ -20,21 +20,19 @@ def g_func():
 # протокол итератора
 class Gen:
     def __init__(self):
-        self.current_index = -1
-        self.l = [x for x in range(2, 21)]
+        self.current_index = 0
+        self.l = [x for x in range(1, 11)]
         
     def __iter__(self):
         return self
     
     def __next__(self):
-        
-        if self.current_index == len(self.l) - 1:
+        if self.current_index > len(self.l) - 1:
             raise StopIteration
-            
-        self.current_index += 1
+        
         value = self.l[self.current_index]
-        if value % 2 == 0:
-            return value
+        self.current_index += 1
+        return value
     
     def __name__():
         return cls.__name__

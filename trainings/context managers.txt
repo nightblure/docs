@@ -1,0 +1,27 @@
+from contextlib import contextmanager
+
+
+@contextmanager
+def test():
+    print('before')
+    yield
+    print('after')
+    
+with test():
+    pass
+
+
+class Test:
+    def __enter__(self):
+        return self
+    
+    def test(self):
+        pass
+    
+    def __exit__(self, *args):
+        print('exit')
+        
+obj = Test()
+
+with obj:
+    obj.test()
