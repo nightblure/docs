@@ -1,27 +1,33 @@
 from contextlib import contextmanager
+import asyncio
 
-
+# FUNCTION
 @contextmanager
 def test():
-    print('before')
+    print('func before')
     yield
-    print('after')
+    print('func after')
     
 with test():
     pass
 
 
+# CLASS
 class Test:
-    def __enter__(self):
+    async def __aenter__(self):
+        print('class aenter')
         return self
     
     def test(self):
         pass
     
-    def __exit__(self, *args):
-        print('exit')
-        
-obj = Test()
+    async def __aexit__(self, *args):
+        print('class aexit')
 
-with obj:
-    obj.test()
+async def main():        
+    obj = Test()
+    
+    async with obj:
+        obj.test()
+        
+asyncio.run(main())
