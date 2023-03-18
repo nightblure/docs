@@ -69,15 +69,12 @@ docker cp pkg/. debian:/tmp/pkg/
 
 // пуш образа в докер-репозиторий
 
-1. посмотреть id нужного образа командой docker images
-id выглядит как 869c87edba75
+1. собрать образ
+docker build -f Dockerfile . -t nightblure/<image_name>:<tag>
 
-2. присвоить образу тег:
-docker tag <id образа> nightblure/<имя образа>
+2. залогиниться:
+docker login -u nightblure
 
-3. залогиниться:
-docker login -u <login>
-
-4. запушить образ
-docker push nightblure/<имя образа>
+3. запушить образ
+docker push nightblure/<image_name>:<tag>
 
