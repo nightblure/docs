@@ -13,8 +13,14 @@ docker run -itd --rm <имя образа>
 // действия с контейнером
 docker start/restart/stop <имя контейнера>
 
+// реал-тайм вывод лога контейнера
+docker logs -f --tail 10 `docker ps -q --filter name=^<container_name>$`
+
 // удаление контейнера
 docker rm <имя контейнера>
+
+// подключение к терминалу контейнера по имени (см. docker filter)
+docker exec -it `docker ps -q --filter name=^<container_name>$` bash
 
 // удаление образа
 docker rmi <имя образа>
@@ -24,6 +30,9 @@ docker container prune
 
 // удаление неиспользуемых образов
 docker image prune -a
+
+// удаление всего (!)
+docker system prune -af
 
 // поднять контейнер в фоновом режиме из файла docker-compose
 1. перейти в директорию к файлу, названному docker-compose.yml/yaml
@@ -67,8 +76,7 @@ id выглядит как 869c87edba75
 docker tag <id образа> nightblure/<имя образа>
 
 3. залогиниться:
-docker login -u nightblure
-130897Binuk (пароль вставить ПКМ)
+docker login -u <login>
 
 4. запушить образ
 docker push nightblure/<имя образа>
