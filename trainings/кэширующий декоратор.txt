@@ -1,0 +1,27 @@
+import time
+
+
+def cache_this():
+    cache = {}
+    
+    def wrapper(func):
+        def inner(t):
+            if t not in cache:
+                value = func(t)
+                cache[t] = value
+            else:
+                print(f'get {t} from cache')
+                return cache[t]
+        return inner
+    return wrapper
+
+
+@cache_this()
+def func(t):
+    print(f'sleep for {t}...')
+    time.sleep(t)
+    return t
+
+
+func(1.5)
+func(1.5)
