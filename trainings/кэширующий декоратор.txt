@@ -1,27 +1,31 @@
 import time
 
-
-def cache_this():
+def cache():
     cache = {}
-    
-    def wrapper(func):
-        def inner(t):
-            if t not in cache:
-                value = func(t)
-                cache[t] = value
-            else:
-                print(f'get {t} from cache')
-                return cache[t]
+    def wrapper(f):
+        def inner(*a, **kw):
+            key = str((a, kw))
+            
+            if key not in cache:
+                cache[key] = f(*a, **kw)
+                
+            return cache[key]
         return inner
     return wrapper
 
-
-@cache_this()
-def func(t):
-    print(f'sleep for {t}...')
+@cache()
+def test(t=1.5, a=1):
     time.sleep(t)
-    return t
+    return 2
 
+def main():
+    r1 = test()
+    r2 = test()
+    r2 = test()
+    r2 = test(3)
+    r2 = test(3)
 
-func(1.5)
-func(1.5)
+start_time = time.monotonic()
+main()
+end_time = time.monotonic()
+print(end_time - start_time)
