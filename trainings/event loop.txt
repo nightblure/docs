@@ -1,0 +1,22 @@
+import time
+from collections import deque
+
+def task1():
+    x = 1
+    while True:
+        yield x
+        x += 1
+        
+def task2():
+    x = 10
+    while True:
+        yield x
+        x += 1
+
+tasks = deque([task1(), task2()])
+
+while tasks:
+    g = tasks.pop()
+    print(next(g))
+    tasks.appendleft(g)
+    time.sleep(1)
