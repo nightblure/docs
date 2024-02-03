@@ -19,11 +19,8 @@ def test(t=1.5, a=1):
     return 2
 
 def main():
-    r1 = test()
-    r2 = test()
-    r2 = test()
-    r2 = test(3)
-    r2 = test(3)
+    for _ in range(10000):
+        test(t=3)
 
 start_time = time.monotonic()
 main()
