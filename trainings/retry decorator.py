@@ -1,26 +1,34 @@
 import time
 
-def retry(retries: int, timeout: float):
+def retry(retries=3, timeout=1):
     def wrapper(f):
         def inner(*a, **kw):
-            retries_counter = 0
+            cur = 0
             
-            for _ in range(retries):
+            while cur < retries:
                 try:
-                    r = f(*a, **kw)
-                    return r
-                except Exception as ex:
-                    print(f"retry {f.__name__}...")
-                    retries_counter += 1
-                    if retries_counter == retries:
-                        raise ex
+                    return f(*a, **kw)
+                except Exception as e:
+                    cur += 1
+                    print(f'retry №{cur}...')
                     time.sleep(timeout)
+                    continue
+                
+            raise Exception('retry exception')
         return inner
     return wrapper
 
+state_for_test = 1
 
-@retry(retries=3, timeout=0.5)
+@retry(5, 1)
 def test():
+    global state_for_test
+    
+    if state_for_test == 3:
+        return 'success'
+        
+    state_for_test += 1
     x = 1 / 0
-
+    
 test()
+    
