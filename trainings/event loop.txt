@@ -1,22 +1,38 @@
 import time
 from collections import deque
 
-def task1():
+
+def g1():
     x = 1
-    while True:
-        yield x
+    while x <= 3:
+        print('some work g1...')
+        time.sleep(0.3)
+        yield
         x += 1
+
+
+def g2():
+    x = 1
+    while x <= 6:
+        print('some work g2...')
+        time.sleep(0.5)
+        yield
+        x += 1
+    
+
+def eventloop(queue):
+    while len(queue) > 0:
+        coroutine = queue.popleft()
         
-def task2():
-    x = 10
-    while True:
-        yield x
-        x += 1
+        try:
+            next(coroutine)
+        except StopIteration:
+            continue
+        
+        queue.append(coroutine)
+        
+    print('eventloop complete')
 
-tasks = deque([task1(), task2()])
 
-while tasks:
-    g = tasks.pop()
-    print(next(g))
-    tasks.appendleft(g)
-    time.sleep(1)
+queue = deque([g1(), g2()])
+eventloop(queue)
